@@ -154,3 +154,125 @@ Les tags sont triés par `totalImpact` décroissant. À impact égal, la récurr
 <div align="center">
 <sub>Fait avec 🖤 — thème sombre uniquement</sub>
 </div>
+
+
+
+
+
+
+
+# BandeSombre ◈ Analyseur
+ 
+> Analyseur local de journal d'humeur — propulsé par Ollama, zéro serveur, zéro cloud.
+ 
+![Interface BandeSombre](https://img.shields.io/badge/version-1.0-c4703a?style=flat-square) ![HTML](https://img.shields.io/badge/stack-HTML%20%2F%20JS-e8e0d0?style=flat-square) ![Ollama](https://img.shields.io/badge/IA-Ollama%20local-6e9e6e?style=flat-square) ![Licence](https://img.shields.io/badge/licence-MIT-4a4538?style=flat-square)
+ 
+---
+ 
+## Présentation
+ 
+**BandeSombre Analyseur** est une application web monopage (un seul fichier `.html`) pour analyser des données d'humeur exportées au format CSV. Elle tourne entièrement dans le navigateur et se connecte à une instance **Ollama locale** pour générer des résumés, détecter des patterns et dialoguer avec vos données — sans aucune donnée envoyée vers un serveur externe.
+ 
+---
+ 
+## Fonctionnalités
+ 
+- **Import CSV** par glisser-déposer ou sélection de fichier
+- **Filtre par plage de dates** avec raccourcis rapides (7j, 14j, 30j, tout)
+- **Indicateur de tendance** comparé à la période précédente équivalente
+- **Visualisations** : courbe temporelle, distribution des niveaux, tags fréquents, corrélations tag → humeur, radar émotionnel
+- **Heatmap calendrier** — vue journalière type GitHub contributions
+- **Comparaison de deux périodes** avec statistiques côte à côte
+- **Analyse IA via Ollama** : résumé global, patterns & tendances, observations bienveillantes, corrélations détaillées
+- **Dialogue contextuel** — chat libre avec vos données
+- **Analyses sauvegardées** — chaque réponse IA est conservée, supprimable individuellement
+- **Export PDF** — génère un rapport complet incluant graphiques, données brutes et analyses sauvegardées
+ 
+---
+ 
+## Format CSV attendu
+ 
+```csv
+Date,Niveau,Humeur,TagsPositifs,TagsNegatifs,Description
+06/03/2026,4,Pas terrible,,Solitude|Stress,
+07/03/2026,7,Bien,Loisirs|Sport,,Super journée dehors
+```
+ 
+| Colonne | Format | Exemple |
+|---|---|---|
+| `Date` | `DD/MM/YYYY` | `14/04/2026` |
+| `Niveau` | Entier 1–10 | `6` |
+| `Humeur` | Texte libre | `Moyen` |
+| `TagsPositifs` | Tags séparés par `\|` | `Sport\|Loisirs` |
+| `TagsNegatifs` | Tags séparés par `\|` | `Solitude\|Stress` |
+| `Description` | Texte libre optionnel | `Bonne journée malgré...` |
+ 
+---
+ 
+## Prérequis
+ 
+### 1. Installer Ollama
+ 
+Téléchargez et installez Ollama depuis le site officiel :
+ 
+**[https://ollama.com/download](https://ollama.com/download)**
+ 
+Disponible sur macOS, Windows et Linux.
+ 
+---
+ 
+### 2. Télécharger le modèle recommandé — `gemma4`
+ 
+Le modèle recommandé est **Gemma 4** de Google. Il offre un excellent équilibre entre qualité d'analyse et vitesse sur du matériel grand public.
+ 
+```bash
+ollama pull gemma4
+```
+ 
+> D'autres modèles compatibles : `llama3`, `mistral`, `phi3`, `qwen2`… Vous pouvez changer le modèle directement dans l'interface.
+ 
+---
+ 
+### 3. Lancer Ollama avec les origines CORS autorisées
+ 
+> ⚠️ **Étape indispensable.** Sans cette commande, le navigateur bloquera les appels API vers Ollama.
+ 
+#### Windows (PowerShell)
+ 
+```powershell
+$env:OLLAMA_ORIGINS="*"; ollama serve
+```
+ 
+#### macOS / Linux (Terminal)
+ 
+```bash
+OLLAMA_ORIGINS="*" ollama serve
+```
+ 
+Laissez ce terminal ouvert pendant toute la session d'utilisation.
+ 
+---
+ 
+## Utilisation
+ 
+1. Lancez Ollama avec la commande ci-dessus
+2. Ouvrez le fichier `bandesombre-analyseur.html` dans votre navigateur
+3. Vérifiez la connexion via le bouton **Tester** dans la barre de configuration
+4. Glissez votre fichier CSV dans la zone de dépôt
+5. Explorez les visualisations, lancez des analyses IA, dialoguez avec vos données
+6. Exportez en PDF via le bouton **Exporter PDF**
+ 
+---
+ 
+## Stack technique
+ 
+- **HTML / CSS / JavaScript** pur — aucun framework, aucune dépendance npm
+- **[Chart.js](https://www.chartjs.org/)** (CDN) — graphiques
+- **[Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)** — inférence locale en streaming
+- **CSS `@media print`** — export PDF natif via le navigateur
+ 
+---
+ 
+## Vie privée
+ 
+Toutes vos données restent sur votre machine. Aucune requête n'est envoyée vers un serveur externe — ni les données CSV, ni les réponses IA. Le seul trafic réseau est entre votre navigateur et `localhost:11434` (Ollama).
